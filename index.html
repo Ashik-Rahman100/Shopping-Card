@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Shopping Card</title>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+   <link rel="stylesheet" href="CSS/bootstrap/css/bootstrap.min.css">
+   <link href="CSS/fontawesome/css/all.css" rel="stylesheet" />
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 class="high-light">ASHIK  SHOPPING CARD </h1>
+   <section id="cart-area" >
+      <div class="container">
+         <div class="cart">
+            <div class="col-md-12 col-lg-10 mx-auto">
+               <div class="cart-item">
+                  <div class="row">
+                     <div class="col-md-7 center-item">
+                        <img src="images/product-1.png" alt="">
+                        <h5>iPhone 11 128GB Black</h5>
+                     </div>
+
+                     <div class="col-md-5 center-item">
+                        <div class="input-group number-spinner">
+                           <button class="btn btn-default" id="remove-product"><i class="fas fa-minus"></i></button>
+                           <input type="text" id="first-product-quantity" class="form-control text-center" value="1">
+                           <button class="btn btn-default" id="add-product"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <h5>$ <span id="product1-price">1219</span> </h5>
+                        <img src="images/remove.png" alt="" class="remove-item">
+                     </div>
+                  </div>
+               </div>
+
+               <div class="cart-item">
+                  <div class="row">
+                     <div class="col-md-7 center-item mx-auto">
+                        <img src="images/product-2.png" alt="">
+                        <h5>iPhone 11 Silicone Case - Black</h5>
+                     </div>
+                     <div class="col-md-5 center-item">
+                        <div class="input-group number-spinner">
+                           <button class="btn btn-default" id="remove-product-second"><i
+                                 class="fas fa-minus"></i></button>
+                           <input type="text" id="second-product-quantity" class="form-control text-center" value="1">
+                           <button class="btn btn-default" id="add-product-second"><i class="fas fa-plus"></i></button>
+
+                        </div>
+                        <h5>$ <span id="product2-price">80</span> </h5>
+                        <img src="images/remove.png" alt="" class="remove-item">
+                     </div>
+                  </div>
+               </div>
+               <!-- cupone code -->
+               <div class="cart-item">
+                  <div class="row">
+                     <div class="col-md-7 center-item mx-auto">
+                        <h5>Do you have a copon? Get 45% discount!</h5>
+                     </div>
+                     <div class="col-md-5 d-flex justify-content-between align-items-center">
+                        <!-- <div class="input-group"> -->
+                        <input type="text" id="coupon-code" class="form-control cupon-code text-center"
+                           value="WEAREHERO">
+                        <!-- </div> -->
+                        <button type="button" id="coupon-apply" class="btn btn-info  check-out">Apply</button>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="cart-item">
+                  <div class="row">
+
+                     <div class="col-md-8">
+                        <h5>Subtotal: </h5>
+                        <h5>Tax:</h5>
+                        <h5 class="savings">Saving:</h5>
+                        <h5>Total:</h5>
+                     </div>
+
+                     <div class="col-md-4 status">
+                        <h5>$ <span id="sub-total-price">1278</span> </h5>
+                        <h5>$0</h5>
+                        <h5 class="savings">$ <span id="saving-price">4544</span></h5>
+                        <h5>$ <span id="total-price">1278</span> </h5>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="col-md-12 pt-4 pb-4">
+                  <button type="button" id="checkout-product" class="btn btn-success check-out">Check Out</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+   <div id="order-confirm-area">
+      <div class="card text-center shadow">
+         <div class="card-body">
+            <h1>Thank you!</h1>
+            <p class="card-text">your order has been confirm</p>
+            <p class="card-text text-info">Order Number:A06sd85e3a</p>
+         </div>
+      </div>
+   </div>
+   <script >// first product
+      const removeFirstProduct = document.getElementById('remove-product');
+      const product1Price = document.getElementById('product1-price');
+      
+      const quantity = document.getElementById('first-product-quantity');
+      removeFirstProduct.addEventListener('click', function() {
+          product1Price.innerText = removeProductAndUpdatePrice(product1Price, quantity);
+          getSubTotal();
+      });
+      
+      // quantity keyboard event
+      quantity.addEventListener('keyup', function() {
+          product1Price.innerText = keyupHandler(quantity, 1219);
+          getSubTotal();
+      });
+      
+      const addFirstProduct = document.getElementById('add-product');
+      addFirstProduct.addEventListener('click', function() {
+          const getTotalPrice = addProductAndPriceUpdate(product1Price, quantity);
+          product1Price.innerText = getTotalPrice;
+          getSubTotal();
+      });
+      
+      // second product
+      const removeSecondProduct = document.getElementById('remove-product-second');
+      const product2Price = document.getElementById('product2-price');
+      const quantity2 = document.getElementById('second-product-quantity');
+      
+      // remove second product
+      removeSecondProduct.addEventListener('click', function() {
+          product2Price.innerText = removeProductAndUpdatePrice(product2Price, quantity2);
+          getSubTotal();
+      });
+      
+      // quantity 2 keyboard event
+      quantity2.addEventListener('keyup', function() {
+          product2Price.innerText = keyupHandler(quantity2, 59);
+          getSubTotal();
+      });
+      
+      // add product
+      const addSecondProduct = document.getElementById('add-product-second');
+      addSecondProduct.addEventListener('click', function() {
+          const getTotalPrice = addProductAndPriceUpdate(product2Price, quantity2);
+          product2Price.innerText = getTotalPrice;
+          getSubTotal();
+      });
+      
+      // remove product and update price
+      function removeProductAndUpdatePrice(price, quantitys) {
+          let priceNumber = parseInt(price.innerText);
+          let productQuanty = parseInt(quantitys.value);
+          if (productQuanty > 1) {
+              quantitys.value = productQuanty - 1;
+              let singlePrice = priceNumber / productQuanty;
+              let total = singlePrice * parseInt(quantitys.value);
+              return total;
+          }
+          return priceNumber;
+      }
+      
+      // add  product
+      function addProductAndPriceUpdate(price, quantitys) {
+          let priceNumber = parseInt(price.innerText);
+          let productQuanty = parseInt(quantitys.value);
+          quantitys.value = productQuanty + 1;
+          let singlePrice = priceNumber / productQuanty;
+          let total = singlePrice * parseInt(quantitys.value);
+          return total;
+      }
+      
+      // input keyup handler
+      function keyupHandler(quantitys, defaultPrice) {
+          console.log(quantitys, defaultPrice);
+          
+          let productQuanty = parseInt(quantitys.value);
+          if (productQuanty == 0 || isNaN(productQuanty)) {
+              quantitys.value = 1;
+              let total = defaultPrice * parseInt(quantitys.value);
+              return total;
+          }
+          let total = defaultPrice * parseInt(quantitys.value);
+          return total;
+      }
+      
+      // cart total
+      const subTotal = document.getElementById('sub-total-price');
+      const totalPrice = document.getElementById('total-price');
+      
+      function getSubTotal() {
+          let total = parseInt(product1Price.innerText) + parseInt(product2Price.innerText);
+          subTotal.innerText = total;
+          totalPrice.innerText = total;
+      }
+      
+      function applyDiscount() {
+          const couponCode = document.getElementById('coupon-code').value;
+          if (couponCode.trim() != 'WEAREHERO') {
+              alert('Invailde cuopne, use this cuopne: WEAREHERO');
+          } else {
+              const totalPriceNumber = parseInt(subTotal.innerText);
+              let savings = Math.round((totalPriceNumber * 15) / 100);
+              let saleprice = totalPriceNumber - savings;
+              totalPrice.innerText = saleprice;
+              document.getElementById('saving-price').innerText = savings;
+              console.log(savings, totalPriceNumber, saleprice);
+          }
+      }
+      document.getElementById('coupon-apply').addEventListener('click', function() {
+          let savings = document.getElementsByClassName('savings');
+          for (let i = 0; i < savings.length; i++) {
+              savings[i].style.display = 'block';
+          }
+          applyDiscount();
+      });
+      
+      // checkout product
+      document.getElementById('checkout-product').addEventListener('click', function() {
+         document.getElementById("cart-area").style.display = 'none';
+          document.getElementById('order-confirm-area').style.display = 'block';                                     
+      });
+      </script>
+   
+</body>
+
+</html>
